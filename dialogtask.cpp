@@ -13,6 +13,7 @@ void DialogTask::insert()
 {
     int idAttivita = findAttivitaId(ui->lineEdit->text());
 
+    model->select();
 
     if (idAttivita > 0) {
         QSqlRecord record = findAttivitaInDay(ui->lineEdit->text(), day);
@@ -29,7 +30,8 @@ void DialogTask::insert()
         f2.setValue(QVariant(day));
 
         m.setTable(table);
-
+        m.setFilter("day='" + day.toString("yyyy-MM-dd") + "'");
+        m.select();
 
         if (record.count() == 0) {
 
@@ -47,11 +49,13 @@ void DialogTask::insert()
                 qDebug() << "INSERITO\n";
             else
                 qDebug() << "Inserimento fallito\n";
+            m.submitAll();
+            //ui->tableView->selectRow(m.rowCount() - 1);
         }
         else {
-            m.select();
 
-            QSqlRecord recordTask;
+
+            QSqlRecord recordTask, dum;
             id = record.value(0).toInt();
 
 
@@ -62,7 +66,12 @@ void DialogTask::insert()
             recordTask.append(f3);
             recordTask.append(f4);
 
-            if (m.setRecord(ui->tableView->currentIndex().row() , recordTask)) {
+
+            dum = m.record(currentRow);
+
+            qDebug() << "ID " << id << " iddb " << dum.value(0).toInt() << "selectd row " << currentRow << endl;
+
+            if (m.setRecord(currentRow , recordTask)) {
                 qDebug() << "UPDATE OK\n";
             }
             else
@@ -73,8 +82,9 @@ void DialogTask::insert()
 
         // Add note
         addNote(id);
-
+        model->submitAll();
         model->select();
+
     }
     textNoteChanged = false;
 }
@@ -211,7 +221,9 @@ QSqlRecord DialogTask::findAttivitaInDay(QString attivita, QDate day)
 {
     QSqlRecord record;
     QSqlTableModel m;
-    m.setTable(table);
+    //m.setTable(table);
+    //m.setFilter("day='" + day.toString("yyyy-MM-dd") + "'");
+
     int row = 0;
 
     while (row < model->rowCount()) {
@@ -245,6 +257,7 @@ int DialogTask::addNewAttivita(const QString &attivita)
     record.append(f2);
 
     attivitaModel->insertRecord(-1, record);
+    attivitaModel->submitAll();
     return id;
 }
 
@@ -289,6 +302,9 @@ void DialogTask::selectedRow(QModelIndex index)
     ui->lineEdit->setText(record.value("attivita").toString());
     ui->timeEdit->setTime(record.value("time").toTime());
     textNoteChanged = false;
+
+    currentRow = index.row();
+
 }
 
 DialogTask::~DialogTask()

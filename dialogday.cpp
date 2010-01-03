@@ -87,8 +87,10 @@ TimeTable DialogDay::getTimes(TimeTable timetable)
 void DialogDay::task()
 {
     DialogTask dialog;
-
+    taskModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
     taskModel->setTable("task");
+    qDebug() << "Day" << day.toString("yyyy-MM-dd") << endl;
+    taskModel->setFilter("day='" + day.toString("yyyy-MM-dd") + "'");
     //taskModel.setEditStrategy(QSqlTableModel::OnFieldChange);
     taskModel->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
     taskModel->setHeaderData(1, Qt::Horizontal, QObject::tr("Date"));

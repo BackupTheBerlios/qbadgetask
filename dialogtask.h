@@ -33,6 +33,7 @@ private:
     int nextId();
     QString table;
     bool textNoteChanged;
+    int currentRow;
 public slots:
     void insert();
     void selectedRow(QModelIndex);
