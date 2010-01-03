@@ -15,7 +15,10 @@ class DialogTask : public QDialog {
 public:
     DialogTask(QWidget *parent = 0);
     ~DialogTask();
-    void openTask(QSqlRelationalTableModel *model, QDate data, QString dbtable);
+    void openTask(QString title, QString labelTime, QSqlRelationalTableModel *model, QDate data, QString dbtable);
+
+protected:
+    void changeEvent(QEvent *e);
     int findAttivitaId(const QString &attivita);
     int addNewAttivita(const QString &attivita);
     int generateAttivitaId();
@@ -23,9 +26,6 @@ public:
     QSqlRecord findAttivitaInDay(QString, QDate);
     void addNote(int id);
     QSqlRecord findNote(int id, QString table, QDate day, int &row);
-protected:
-    void changeEvent(QEvent *e);
-
 private:
     Ui::DialogTask *ui;
     QSqlRelationalTableModel *model;

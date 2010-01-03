@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>319</width>
-    <height>253</height>
+    <height>284</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -225,8 +225,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>296</x>
-     <y>184</y>
+     <x>305</x>
+     <y>243</y>
     </hint>
     <hint type="destinationlabel">
      <x>316</x>
@@ -241,8 +241,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>303</x>
-     <y>220</y>
+     <x>309</x>
+     <y>274</y>
     </hint>
     <hint type="destinationlabel">
      <x>316</x>
@@ -257,12 +257,28 @@
    <slot>task()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>305</x>
-     <y>159</y>
+     <x>309</x>
+     <y>212</y>
     </hint>
     <hint type="destinationlabel">
      <x>312</x>
      <y>160</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonTodo</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogDay</receiver>
+   <slot>todo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>206</x>
+     <y>163</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>188</x>
+     <y>150</y>
     </hint>
    </hints>
   </connection>
@@ -271,5 +287,6 @@
   <slot>enableFirst(bool)</slot>
   <slot>enableSecond(bool)</slot>
   <slot>task()</slot>
+  <slot>todo()</slot>
  </slots>
 </ui>

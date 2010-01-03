@@ -100,5 +100,24 @@ void DialogDay::task()
 
     taskModel->select();
     //QSqlRelationalTableModel todoModel;
-    dialog.openTask(taskModel, day, "task");
+    dialog.openTask("Task", "Elapsed", taskModel, day, "task");
+}
+
+void DialogDay::todo()
+{
+    DialogTask dialog;
+    taskModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    taskModel->setTable("todo");
+    qDebug() << "Day" << day.toString("yyyy-MM-dd") << endl;
+    taskModel->setFilter("day='" + day.toString("yyyy-MM-dd") + "'");
+    //taskModel.setEditStrategy(QSqlTableModel::OnFieldChange);
+    taskModel->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
+    taskModel->setHeaderData(1, Qt::Horizontal, QObject::tr("Date"));
+    taskModel->setHeaderData(2, Qt::Horizontal, QObject::tr("Expected"));
+    //taskModel->setHeaderData(3, Qt::Horizontal, QObject::tr("Attivita'"));
+    taskModel->setRelation(3, QSqlRelation("attivita", "id", "attivita"));
+
+    taskModel->select();
+    //QSqlRelationalTableModel todoModel;
+    dialog.openTask("ToDo", "Expected", taskModel, day, "todo");
 }

@@ -13,7 +13,7 @@ void DialogTask::insert()
 {
     int idAttivita = findAttivitaId(ui->lineEdit->text());
 
-    model->select();
+
 
     if (idAttivita > 0) {
         QSqlRecord record = findAttivitaInDay(ui->lineEdit->text(), day);
@@ -50,12 +50,14 @@ void DialogTask::insert()
             else
                 qDebug() << "Inserimento fallito\n";
             m.submitAll();
+            model->select();
+            currentRow = model->rowCount() - 1;
             //ui->tableView->selectRow(m.rowCount() - 1);
         }
         else {
 
 
-            QSqlRecord recordTask, dum;
+            QSqlRecord recordTask;
             id = record.value(0).toInt();
 
 
@@ -66,10 +68,8 @@ void DialogTask::insert()
             recordTask.append(f3);
             recordTask.append(f4);
 
+            qDebug() << "CURRENT " << currentRow << endl;
 
-            dum = m.record(currentRow);
-
-            qDebug() << "ID " << id << " iddb " << dum.value(0).toInt() << "selectd row " << currentRow << endl;
 
             if (m.setRecord(currentRow , recordTask)) {
                 qDebug() << "UPDATE OK\n";
@@ -77,12 +77,18 @@ void DialogTask::insert()
             else
                 qDebug() << "UPDATE KO " << m.lastError() << endl;
             m.submit();
+
         }
 
 
         // Add note
         addNote(id);
         model->submitAll();
+        ui->tableView->horizontalHeader()->setStretchLastSection(true);
+        ui->tableView->resizeColumnsToContents();
+
+        // here to paint tableView in beatiful mode
+
         model->select();
 
     }
@@ -151,11 +157,16 @@ void DialogTask::addNote(int id)
 }
 
 
-void DialogTask::openTask(QSqlRelationalTableModel *modelTask, QDate daySelected, QString dbtable)
+void DialogTask::openTask(QString title, QString labelTime, QSqlRelationalTableModel *modelTask, QDate daySelected, QString dbtable)
 {
+    this->setWindowTitle(title);
+    ui->label->setText(labelTime);
     day = daySelected;
     model = modelTask;
     ui->tableView->setModel(model);
+    ui->tableView->setColumnHidden(0, true);
+    ui->tableView->horizontalHeader()->setStretchLastSection(true);
+    ui->tableView->resizeColumnsToContents();
     table = dbtable;
     textNoteChanged = false;
     if (this->exec() == QDialog::Accepted) {

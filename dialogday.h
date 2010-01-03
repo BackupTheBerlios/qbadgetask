@@ -30,6 +30,7 @@ public slots:
     void enableFirst(bool);
     void enableSecond(bool);
     void task();
+    void todo();
 };
 
 #endif // DIALOGDAY_H
