@@ -4,7 +4,7 @@
 
 QT += sql
 
-TARGET = badge
+TARGET = qbadgetask
 TEMPLATE = app
 SOURCES += main.cpp \
     badgewindow.cpp \
