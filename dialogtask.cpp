@@ -1,5 +1,6 @@
 #include "dialogtask.h"
 #include "ui_dialogtask.h"
+#include <QMessageBox>
 
 DialogTask::DialogTask(QWidget *parent) :
     QDialog(parent),
@@ -11,6 +12,12 @@ DialogTask::DialogTask(QWidget *parent) :
 
 void DialogTask::insert()
 {
+    if (ui->lineEdit->text().size() == 0) {
+        QMessageBox::warning(this, "Insert", "Activity is empty");
+        return;
+    }
+
+
     int idAttivita = findAttivitaId(ui->lineEdit->text());
 
 
@@ -93,6 +100,7 @@ void DialogTask::insert()
 
     }
     textNoteChanged = false;
+    ui->pushButtonInsert->setEnabled(false);
 }
 
 void DialogTask::addNote(int id)
@@ -169,6 +177,8 @@ void DialogTask::openTask(QString title, QString labelTime, QSqlRelationalTableM
     ui->tableView->resizeColumnsToContents();
     table = dbtable;
     textNoteChanged = false;
+    ui->pushButtonInsert->setEnabled(false);
+
     if (this->exec() == QDialog::Accepted) {
 
     }
@@ -177,6 +187,7 @@ void DialogTask::openTask(QString title, QString labelTime, QSqlRelationalTableM
 void DialogTask::noteChanged()
 {
     textNoteChanged = true;
+    ui->pushButtonInsert->setEnabled(true);
 }
 
 int DialogTask::nextId()
@@ -317,6 +328,18 @@ void DialogTask::selectedRow(QModelIndex index)
     currentRow = index.row();
 
 }
+
+
+void DialogTask::timeChanged()
+{
+    ui->pushButtonInsert->setEnabled(true);
+}
+
+void DialogTask::activityChanged()
+{
+    ui->pushButtonInsert->setEnabled(true);
+}
+
 
 DialogTask::~DialogTask()
 {

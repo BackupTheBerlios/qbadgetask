@@ -19,6 +19,8 @@ public:
 
 private:
     Ui::BadgeWindow *ui;
+    unsigned int days; // 1 mon 2 Tue 4 wed 8 Thu 16 Fri 32 Sat 64 Sun
+    QTime workingTime;
 public slots:
     void selectedDay(QDate);
     void search();

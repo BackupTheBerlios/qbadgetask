@@ -156,10 +156,44 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>lineEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>DialogTask</receiver>
+   <slot>activityChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>166</x>
+     <y>43</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>408</x>
+     <y>13</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>timeEdit</sender>
+   <signal>timeChanged(QTime)</signal>
+   <receiver>DialogTask</receiver>
+   <slot>timeChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>82</x>
+     <y>35</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>97</x>
+     <y>58</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>insert()</slot>
   <slot>selectedRow(QModelIndex)</slot>
   <slot>noteChanged()</slot>
+  <slot>activityChanged()</slot>
+  <slot>timeChanged()</slot>
  </slots>
 </ui>

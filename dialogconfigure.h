@@ -12,7 +12,7 @@ class DialogConfigure : public QDialog {
 public:
     DialogConfigure(QWidget *parent = 0);
     ~DialogConfigure();
-
+    bool openConfigure(unsigned int &days, QTime &time);
 protected:
     void changeEvent(QEvent *e);
 

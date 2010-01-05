@@ -24,6 +24,12 @@ BadgeWindow::BadgeWindow(QWidget *parent)
     connect(ui->actionInfo, SIGNAL(triggered()), this, SLOT(info()));
     connect(ui->actionConfigure, SIGNAL(triggered()), this, SLOT(configure()));
 
+    QSettings settings("Niqt", "qbadgetask");
+    if ((days = settings.value("days", 0).toInt()) != 0) {
+        workingTime =  settings.value("workingtime").toTime();
+
+    }
+
 
     //showMaximized();
 }
@@ -51,7 +57,15 @@ void BadgeWindow::configure()
 {
     DialogConfigure configure;
 
-    configure.exec();
+
+
+    if (configure.openConfigure(days, workingTime)) {
+        QSettings settings("Niqt", "qbadgetask");
+        settings.setValue("days", days);
+        settings.setValue("workingtime", workingTime);
+
+
+    }
 
 }
 

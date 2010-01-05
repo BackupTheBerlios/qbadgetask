@@ -38,6 +38,8 @@ public slots:
     void insert();
     void selectedRow(QModelIndex);
     void noteChanged();
+    void timeChanged();
+    void activityChanged();
 };
 
 #endif // DIALOGTASK_H
