@@ -132,7 +132,7 @@ bool BadgeData::getTimetable(TimeTable &tt)
     return false;
 }
 
-QTime BadgeData::totalTime(QDate begin, QDate end, QTime &overTime, QTime workingTime, int days)
+QTime BadgeData::totalTime(QDate begin, QDate end, QTime &overTime, QMap<QString, QTime> &activities, QTime workingTime, int days)
 {
      QTime total(0, 0, 0, 0);
      int totalInSeconds = 0;
@@ -167,6 +167,7 @@ QTime BadgeData::totalTime(QDate begin, QDate end, QTime &overTime, QTime workin
     total.setHMS((int)(totalInSeconds / 3600), (int) ((totalInSeconds % 3600) / 60), 0);
 #else
     QSqlQuery query;
+    QSqlQuery queryTask;
     QVariant vbegin(begin);
     QVariant vend(end);
 
@@ -180,6 +181,8 @@ QTime BadgeData::totalTime(QDate begin, QDate end, QTime &overTime, QTime workin
     QTime endSecond;
     QDate day;
     QTime zeroTime;
+    QTime elapsed;
+    QString activity;
     int dayHour = 0;
     int overTimeSeconds;
 
@@ -217,9 +220,26 @@ QTime BadgeData::totalTime(QDate begin, QDate end, QTime &overTime, QTime workin
                 overTimeSeconds = dayHour;
         }
 
+        // Find task for day
+        // select task.time, attivita.attivita from task join attivita on (task.how=attivita.id) where task.day="2010-01-07"
+        QVariant vday(day);
+        queryTask.prepare("select task.time, attivita.attivita from task join attivita on (task.how=attivita.id) where task.day=?");
+        queryTask.addBindValue(vday);
+        while (queryTask.next()) {
+            elapsed = query.value(0).toTime();
+            activity = query.value(1).toString();
+            if (activities.contains(activity)) {
+                elapsed.addSecs((elapsed.hour() * 60 + elapsed.minute() * 60));
+
+            }
+            else
+                activities[activity] = elapsed;
+        }
+
         totalInSeconds += dayHour;
     }
     total.setHMS((int)(totalInSeconds / 3600), (int) ((totalInSeconds % 3600) / 60), 0);
+    overTime.setHMS((int)(overTimeSeconds / 3600), (int) ((overTimeSeconds % 3600) / 60), 0);
 #endif
     return total;
 

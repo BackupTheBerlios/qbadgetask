@@ -76,10 +76,21 @@ void BadgeWindow::search()
     QString message;
     QString hours;
     QString minutes;
+    QDate begin;
+    QDate end;
     bool ok;
 
-    total = searchDialog.totalHours(ok);
-    if (ok) {
+    //total = searchDialog.totalHours(ok);
+    if (searchDialog.range(begin, end)) {
+        QTime workingTime;
+        QTime overTime;
+        int days;
+        BadgeData data;
+        QMap <QString, QTime> activities;
+        ok = true;
+        total = data.totalTime(begin, end, overTime, activities, workingTime, days);
+
+
         hours.setNum(total.hour());
         minutes.setNum(total.minute());
         message = "Total time is: " + hours + " hours and " + minutes + " minutes";

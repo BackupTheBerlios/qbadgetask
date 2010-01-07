@@ -2,6 +2,7 @@
 #define DIALOGSEARCH_H
 
 #include <QDialog>
+#include <QDate>
 
 namespace Ui {
     class DialogSearch;
@@ -12,7 +13,8 @@ class DialogSearch : public QDialog {
 public:
     DialogSearch(QWidget *parent = 0);
     ~DialogSearch();
-    QTime totalHours(bool &ok);
+    //QTime totalHours(bool &ok);
+    bool range(QDate &begin, QDate &end);
 protected:
     void changeEvent(QEvent *e);
 

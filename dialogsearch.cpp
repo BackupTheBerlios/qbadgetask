@@ -42,7 +42,7 @@ void DialogSearch::end()
     ui->dateEditEnd->setDate(cal.getDate(ui->dateEditEnd->date()));
 }
 
-QTime DialogSearch::totalHours(bool &ok)
+/*QTime DialogSearch::totalHours(bool &ok)
 {
 
     if (this->exec() == QDialog::Accepted) {
@@ -50,14 +50,34 @@ QTime DialogSearch::totalHours(bool &ok)
         QTime overTime;
         int days;
         BadgeData data;
-
+        QMap <QString, QTime> activities;
         ok = true;
-        return data.totalTime(ui->dateEditStart->date(), ui->dateEditEnd->date(), overTime, workingTime, days);
+        return data.totalTime(ui->dateEditStart->date(), ui->dateEditEnd->date(), overTime, activities, workingTime, days);
     }
     ok = false;
 
 
     return QTime(0, 0, 0, 0);
+}*/
+
+bool DialogSearch::range(QDate &begin, QDate &end)
+{
+
+    if (this->exec() == QDialog::Accepted) {
+        /*QTime workingTime;
+        QTime overTime;
+        int days;
+        BadgeData data;
+        QMap <QString, QTime> activities;
+        ok = true;*/
+        begin = ui->dateEditStart->date();
+        end = ui->dateEditEnd->date();
+        return true;
+    }
+    return false;
+
+
+
 }
 
 void DialogSearch::accept()
