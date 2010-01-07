@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QSqlQuery>
 #include <QVariant>
+#include <math.h>
 
 BadgeData::BadgeData()
 {
@@ -131,7 +132,7 @@ bool BadgeData::getTimetable(TimeTable &tt)
     return false;
 }
 
-QTime BadgeData::totalTime(QDate begin, QDate end)
+QTime BadgeData::totalTime(QDate begin, QDate end, QTime &overTime, QTime workingTime, int days)
 {
      QTime total(0, 0, 0, 0);
      int totalInSeconds = 0;
@@ -177,6 +178,10 @@ QTime BadgeData::totalTime(QDate begin, QDate end)
     QTime endFirst;
     QTime beginSecond;
     QTime endSecond;
+    QDate day;
+    QTime zeroTime;
+    int dayHour = 0;
+    int overTimeSeconds;
 
     query.prepare("select *  from days where daywork >= ? AND daywork <= ?");
     query.addBindValue(vbegin);
@@ -185,24 +190,34 @@ QTime BadgeData::totalTime(QDate begin, QDate end)
 
 
     while (query.next()) {
-
+        day = query.value(0).toDate();
         entrance = query.value(1).toTime();
         exit = query.value(2).toTime();
         beginFirst  = query.value(3).toTime();
         endFirst  = query.value(4).toTime();
         beginSecond  = query.value(5).toTime();
         endSecond  = query.value(6).toTime();
-
+        dayHour = 0;
         if (exit > entrance) {
-            totalInSeconds += entrance.secsTo(exit);
+            dayHour += entrance.secsTo(exit);
             if (beginFirst != endFirst) {
-                totalInSeconds -= beginFirst.secsTo(endFirst);
+                dayHour -= beginFirst.secsTo(endFirst);
             }
 
             if (beginSecond != endSecond) {
-                totalInSeconds -= beginSecond.secsTo(endSecond);
+                dayHour -= beginSecond.secsTo(endSecond);
             }
         }
+
+        // Calculate overTime
+        if ((dayHour - zeroTime.secsTo(workingTime)) > 0) {
+            if (((int) pow(2, (day.dayOfWeek() - 1))) & days)
+                overTimeSeconds = dayHour - zeroTime.secsTo(workingTime);
+            else
+                overTimeSeconds = dayHour;
+        }
+
+        totalInSeconds += dayHour;
     }
     total.setHMS((int)(totalInSeconds / 3600), (int) ((totalInSeconds % 3600) / 60), 0);
 #endif

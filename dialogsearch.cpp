@@ -46,9 +46,13 @@ QTime DialogSearch::totalHours(bool &ok)
 {
 
     if (this->exec() == QDialog::Accepted) {
+        QTime workingTime;
+        QTime overTime;
+        int days;
         BadgeData data;
+
         ok = true;
-        return data.totalTime(ui->dateEditStart->date(), ui->dateEditEnd->date());
+        return data.totalTime(ui->dateEditStart->date(), ui->dateEditEnd->date(), overTime, workingTime, days);
     }
     ok = false;
 
