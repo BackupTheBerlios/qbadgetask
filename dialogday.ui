@@ -155,21 +155,21 @@
     </layout>
    </item>
    <item row="6" column="0">
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="pushButtonTask">
      <property name="text">
       <string>Task</string>
      </property>
     </widget>
    </item>
    <item row="7" column="0">
-    <widget class="QPushButton" name="pushButton_2">
+    <widget class="QPushButton" name="pushButtonSave">
      <property name="text">
-      <string>Ok</string>
+      <string>Save</string>
      </property>
     </widget>
    </item>
    <item row="8" column="0">
-    <widget class="QPushButton" name="pushButton_3">
+    <widget class="QPushButton" name="pushButtonClose">
      <property name="text">
       <string>Close</string>
      </property>
@@ -219,23 +219,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_2</sender>
-   <signal>clicked()</signal>
-   <receiver>DialogDay</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>305</x>
-     <y>243</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>316</x>
-     <y>186</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_3</sender>
+   <sender>pushButtonClose</sender>
    <signal>clicked()</signal>
    <receiver>DialogDay</receiver>
    <slot>reject()</slot>
@@ -251,7 +235,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton</sender>
+   <sender>pushButtonTask</sender>
    <signal>clicked()</signal>
    <receiver>DialogDay</receiver>
    <slot>task()</slot>
@@ -282,11 +266,28 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButtonSave</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogDay</receiver>
+   <slot>save()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>50</x>
+     <y>238</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>6</x>
+     <y>225</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>enableFirst(bool)</slot>
   <slot>enableSecond(bool)</slot>
   <slot>task()</slot>
   <slot>todo()</slot>
+  <slot>save()</slot>
  </slots>
 </ui>

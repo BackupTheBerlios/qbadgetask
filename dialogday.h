@@ -21,16 +21,20 @@ private:
     bool change;
     QDate day;
     QSqlRelationalTableModel *taskModel;
+    bool exist;
+
 public:
     DialogDay(QWidget *parent = 0);
     ~DialogDay();
     TimeTable getTimes(TimeTable timetable);
+    void getTimes(TimeTable timetable, bool dayExist);
 
 public slots:
     void enableFirst(bool);
     void enableSecond(bool);
     void task();
     void todo();
+    void save();
 };
 
 #endif // DIALOGDAY_H

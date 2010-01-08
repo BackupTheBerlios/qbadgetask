@@ -46,15 +46,17 @@ void BadgeWindow::selectedDay(QDate date)
 {
     DialogDay day;
     BadgeData data;
-
+    bool dayExist;
     TimeTable tt;
+
     tt.day = date;
-    data.getTimetable(tt);
-    tt = day.getTimes(tt);
-    if (tt.wrong() != TimeTable::WRONG) {
+    dayExist = data.getTimetable(tt);
+    day.getTimes(tt, dayExist);
+    //tt = day.getTimes(tt, dayExist);
+    /*if (tt.wrong() != TimeTable::WRONG) {
         BadgeData data;
         data.setTimetable(tt);
-    }
+    }*/
 
 }
 
