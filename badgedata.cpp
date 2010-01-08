@@ -186,6 +186,8 @@ int BadgeData::totalTime(QDate begin, QDate end, int &overTime /*, QMap<QString,
     int dayHour = 0;
     int overTimeSeconds;
 
+    zeroTime.setHMS(0, 0, 0);
+
     query.prepare("select *  from days where daywork >= ? AND daywork <= ?");
     query.addBindValue(vbegin);
     query.addBindValue(vend);
@@ -211,14 +213,23 @@ int BadgeData::totalTime(QDate begin, QDate end, int &overTime /*, QMap<QString,
                 dayHour -= beginSecond.secsTo(endSecond);
             }
 
-            // Calculate overTime
-            if ((dayHour - zeroTime.secsTo(workingTime)) > 0) {
-                if (((int) pow(2, (day.dayOfWeek() - 1))) & days)
-                    overTimeSeconds = dayHour - zeroTime.secsTo(workingTime);
-                else
-                    overTimeSeconds = dayHour;
-            }
 
+
+        }
+
+        // Calculate overTime
+
+        //qDebug() << "DAYHOUR " << dayHour << " " << zeroTime.secsTo(workingTime) << endl;
+
+        if (dayHour > 0 && (dayHour - zeroTime.secsTo(workingTime)) > 0 ) {
+            if (((int) pow(2, (day.dayOfWeek() - 1))) & days) {
+                overTimeSeconds = dayHour - zeroTime.secsTo(workingTime);
+                //qDebug() << "OVERTIME " << days << endl;
+            }
+            else {
+                //qDebug() << "TUTTO IL GIORNO " << days << endl;
+                overTimeSeconds = dayHour;
+            }
         }
 
 

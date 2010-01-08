@@ -10,6 +10,21 @@ DialogStatistics::DialogStatistics(QWidget *parent) :
 
 void DialogStatistics::showStatistics(QDate begin, QDate end, int total, int overTime, QSqlQueryModel *model)
 {
+    QString hours;
+    QString minutes;
+    QString hoursOvertime;
+    QString minutesOvertime;
+
+    hours.setNum((total / 3600));
+    minutes.setNum((total % 3600) / 60);
+    hoursOvertime.setNum((overTime / 3600));
+    minutesOvertime.setNum((overTime % 3600) / 60);
+
+    ui->tableView->setModel(model);
+    ui->labelPeriod->setText("From " + begin.toString("yyyy-MM-dd") + " to " + end.toString("yyyy-MM-dd"));
+    ui->label->setText("Total working time is " + hours + " hours and " + minutes + " minutes");
+    ui->label_2->setText("Total overtime is " + hoursOvertime + " hours and " + minutesOvertime + " minutes");
+
     if (this->exec() == QDialog::Accepted) {
 
     }

@@ -31,6 +31,10 @@ BadgeWindow::BadgeWindow(QWidget *parent)
         workingTime =  settings.value("workingtime").toTime();
 
     }
+    else {
+        days = 127;
+        workingTime.setHMS(8, 0, 0);
+    }
 
 
     //showMaximized();
@@ -84,20 +88,30 @@ void BadgeWindow::search()
 
     //total = searchDialog.totalHours(ok);
     if (searchDialog.range(begin, end)) {
-        QTime workingTime;
+
         DialogStatistics statistics;
         int overTime;
-        int days;
+
         BadgeData data;
         QMap <QString, QTime> activities;
         QSqlQueryModel *model;
 
-        model = new QSqlQueryModel(this);
+        model = new QSqlQueryModel();
 
         ok = true;
         total = data.totalTime(begin, end, overTime, /*activities,*/ workingTime, days);
 
+
+        model->setQuery("select attivita.attivita, (sum((strftime('%H',time) * 3600) + (strftime('%M',time) * 60)) / 3600),   ((sum((strftime('%H',time) * 3600) + (strftime('%M',time) * 60)) % 3600) /60) from attivita join task on (attivita.id=task.how) where task.day >= '"+ begin.toString("yyyy-MM-dd") + "' AND task.day <= '" + end.toString("yyyy-MM-dd") + "' group by attivita.attivita");
+        model->setHeaderData(0, Qt::Horizontal, tr("Task"));
+        model->setHeaderData(1, Qt::Horizontal, tr("Hours"));
+        model->setHeaderData(2, Qt::Horizontal, tr("Minutes"));
+
+
+
         statistics.showStatistics(begin, end, total, overTime, model);
+
+
 
         delete model;
 /*
