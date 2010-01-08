@@ -25,6 +25,9 @@ void DialogStatistics::showStatistics(QDate begin, QDate end, int total, int ove
     ui->label->setText("Total working time is " + hours + " hours and " + minutes + " minutes");
     ui->label_2->setText("Total overtime is " + hoursOvertime + " hours and " + minutesOvertime + " minutes");
 
+    ui->tableView->horizontalHeader()->setStretchLastSection(true);
+    ui->tableView->resizeColumnsToContents();
+
     if (this->exec() == QDialog::Accepted) {
 
     }

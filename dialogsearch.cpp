@@ -62,6 +62,13 @@ void DialogSearch::end()
 
 bool DialogSearch::range(QDate &begin, QDate &end)
 {
+    QDate start;
+
+    // Default search from 1 of the current month to today
+
+    start.setYMD(QDate::currentDate().year(), QDate::currentDate().month(), 1);
+    ui->dateEditStart->setDate(start);
+    ui->dateEditEnd->setDate(QDate::currentDate());
 
     if (this->exec() == QDialog::Accepted) {
         /*QTime workingTime;
