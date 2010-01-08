@@ -1,9 +1,7 @@
 # -------------------------------------------------
 # Project created by QtCreator 2009-11-24T13:07:09
 # -------------------------------------------------
-
 QT += sql
-
 TARGET = qbadgetask
 TEMPLATE = app
 SOURCES += main.cpp \
@@ -14,7 +12,8 @@ SOURCES += main.cpp \
     dialogsearch.cpp \
     dialogcalendar.cpp \
     dialogtask.cpp \
-    dialogconfigure.cpp
+    dialogconfigure.cpp \
+    dialogstatistics.cpp
 HEADERS += badgewindow.h \
     badgedata.h \
     timetable.h \
@@ -23,10 +22,12 @@ HEADERS += badgewindow.h \
     dialogcalendar.h \
     dialogtask.h \
     dialogconfigure.h \
-    connection.h
+    connection.h \
+    dialogstatistics.h
 FORMS += badgewindow.ui \
     dialogday.ui \
     dialogsearch.ui \
     dialogcalendar.ui \
     dialogtask.ui \
-    dialogconfigure.ui
+    dialogconfigure.ui \
+    dialogstatistics.ui
