@@ -7,6 +7,8 @@
 #include "dialogsearch.h"
 #include <QMessageBox>
 #include "dialogconfigure.h"
+#include "dialogstatistics.h"
+
 
 BadgeWindow::BadgeWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::BadgeWindow)
@@ -72,7 +74,7 @@ void BadgeWindow::configure()
 void BadgeWindow::search()
 {
     DialogSearch searchDialog;
-    QTime total;
+    int total;
     QString message;
     QString hours;
     QString minutes;
@@ -83,18 +85,27 @@ void BadgeWindow::search()
     //total = searchDialog.totalHours(ok);
     if (searchDialog.range(begin, end)) {
         QTime workingTime;
-        QTime overTime;
+        DialogStatistics statistics;
+        int overTime;
         int days;
         BadgeData data;
         QMap <QString, QTime> activities;
+        QSqlQueryModel *model;
+
+        model = new QSqlQueryModel(this);
+
         ok = true;
-        total = data.totalTime(begin, end, overTime, activities, workingTime, days);
+        total = data.totalTime(begin, end, overTime, /*activities,*/ workingTime, days);
 
+        statistics.showStatistics(begin, end, total, overTime, model);
 
+        delete model;
+/*
         hours.setNum(total.hour());
         minutes.setNum(total.minute());
         message = "Total time is: " + hours + " hours and " + minutes + " minutes";
-        QMessageBox::information(this, tr("Badge"), tr(message.toLatin1()));
+        QMessageBox::information(this, tr("Badge"), tr(message.toLatin1()));*/
+
     }
 
 }

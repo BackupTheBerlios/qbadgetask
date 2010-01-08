@@ -132,7 +132,7 @@ bool BadgeData::getTimetable(TimeTable &tt)
     return false;
 }
 
-QTime BadgeData::totalTime(QDate begin, QDate end, QTime &overTime, QMap<QString, QTime> &activities, QTime workingTime, int days)
+int BadgeData::totalTime(QDate begin, QDate end, int &overTime /*, QMap<QString, QTime> &activities*/, QTime workingTime, int days)
 {
      QTime total(0, 0, 0, 0);
      int totalInSeconds = 0;
@@ -210,18 +210,22 @@ QTime BadgeData::totalTime(QDate begin, QDate end, QTime &overTime, QMap<QString
             if (beginSecond != endSecond) {
                 dayHour -= beginSecond.secsTo(endSecond);
             }
+
+            // Calculate overTime
+            if ((dayHour - zeroTime.secsTo(workingTime)) > 0) {
+                if (((int) pow(2, (day.dayOfWeek() - 1))) & days)
+                    overTimeSeconds = dayHour - zeroTime.secsTo(workingTime);
+                else
+                    overTimeSeconds = dayHour;
+            }
+
         }
 
-        // Calculate overTime
-        if ((dayHour - zeroTime.secsTo(workingTime)) > 0) {
-            if (((int) pow(2, (day.dayOfWeek() - 1))) & days)
-                overTimeSeconds = dayHour - zeroTime.secsTo(workingTime);
-            else
-                overTimeSeconds = dayHour;
-        }
+
 
         // Find task for day
         // select task.time, attivita.attivita from task join attivita on (task.how=attivita.id) where task.day="2010-01-07"
+        /*
         QVariant vday(day);
         queryTask.prepare("select task.time, attivita.attivita from task join attivita on (task.how=attivita.id) where task.day=?");
         queryTask.addBindValue(vday);
@@ -234,13 +238,14 @@ QTime BadgeData::totalTime(QDate begin, QDate end, QTime &overTime, QMap<QString
             }
             else
                 activities[activity] = elapsed;
-        }
+        }*/
 
         totalInSeconds += dayHour;
     }
-    total.setHMS((int)(totalInSeconds / 3600), (int) ((totalInSeconds % 3600) / 60), 0);
-    overTime.setHMS((int)(overTimeSeconds / 3600), (int) ((overTimeSeconds % 3600) / 60), 0);
+    //total.setHMS((int)(totalInSeconds / 3600), (int) ((totalInSeconds % 3600) / 60), 0);
+    //overTime.setHMS((int)(overTimeSeconds / 3600), (int) ((overTimeSeconds % 3600) / 60), 0);
+    overTime = overTimeSeconds;
 #endif
-    return total;
+    return totalInSeconds;
 
 }

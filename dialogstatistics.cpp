@@ -8,6 +8,13 @@ DialogStatistics::DialogStatistics(QWidget *parent) :
     ui->setupUi(this);
 }
 
+void DialogStatistics::showStatistics(QDate begin, QDate end, int total, int overTime, QSqlQueryModel *model)
+{
+    if (this->exec() == QDialog::Accepted) {
+
+    }
+}
+
 DialogStatistics::~DialogStatistics()
 {
     delete ui;

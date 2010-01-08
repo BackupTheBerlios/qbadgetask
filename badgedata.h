@@ -12,7 +12,7 @@ public:
     BadgeData();
     bool setTimetable(TimeTable in);
     bool getTimetable(TimeTable &out);
-    QTime totalTime(QDate begin, QDate end, QTime &overTime, QMap<QString, QTime> &activities, QTime workingTime, int days = 127);
+    int totalTime(QDate begin, QDate end, int &overTime, /*QMap<QString, QTime> &activities,*/ QTime workingTime, int days = 127);
 };
 
 #endif // BADGEDATA_H
