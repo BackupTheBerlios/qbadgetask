@@ -223,12 +223,12 @@ int BadgeData::totalTime(QDate begin, QDate end, int &overTime /*, QMap<QString,
 
         if (dayHour > 0 && (dayHour - zeroTime.secsTo(workingTime)) > 0 ) {
             if (((int) pow(2, (day.dayOfWeek() - 1))) & days) {
-                overTimeSeconds = dayHour - zeroTime.secsTo(workingTime);
+                overTimeSeconds += dayHour - zeroTime.secsTo(workingTime);
                 //qDebug() << "OVERTIME " << days << endl;
             }
             else {
                 //qDebug() << "TUTTO IL GIORNO " << days << endl;
-                overTimeSeconds = dayHour;
+                overTimeSeconds += dayHour;
             }
         }
 
