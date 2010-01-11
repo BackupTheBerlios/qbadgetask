@@ -184,7 +184,7 @@ int BadgeData::totalTime(QDate begin, QDate end, int &overTime /*, QMap<QString,
     QTime elapsed;
     QString activity;
     int dayHour = 0;
-    int overTimeSeconds;
+    int overTimeSeconds = 0;
 
     zeroTime.setHMS(0, 0, 0);
 
