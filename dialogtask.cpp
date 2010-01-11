@@ -1,12 +1,38 @@
 #include "dialogtask.h"
 #include "ui_dialogtask.h"
 #include <QMessageBox>
+#include <QCompleter>
 
 DialogTask::DialogTask(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogTask)
 {
     ui->setupUi(this);
+    QSqlTableModel *model = new QSqlTableModel;
+    QStringList listAttivita;
+    QSqlRecord record;
+
+    model->setTable("attivita");
+
+    model->select();
+    model->removeColumn(0);
+    model->select();
+
+    int row = 0;
+
+    while (row < model->rowCount()) {
+        record = model->record(row);
+        listAttivita << record.value("attivita").toString();
+
+        row++;
+    }
+
+
+    QCompleter *completer = new QCompleter(listAttivita);
+
+
+
+    ui->lineEdit->setCompleter(completer);
 }
 
 

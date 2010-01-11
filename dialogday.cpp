@@ -128,10 +128,10 @@ void DialogDay::getTimes(TimeTable timetable, bool dayExist)
 void DialogDay::save()
 {
 
-    if (m_ui->timeEditEntrance->time() > m_ui->timeEditExit->time()) {
+    /*if (m_ui->timeEditEntrance->time() > m_ui->timeEditExit->time()) {
         QMessageBox::warning(this, "Error", "Exit Time must to be minor of Entrance Time");
     }
-    else {
+    else*/ {
         TimeTable timetable;
         timetable.day = day;
         timetable.entrance = m_ui->timeEditEntrance->time();
