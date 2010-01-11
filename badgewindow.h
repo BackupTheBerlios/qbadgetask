@@ -26,6 +26,7 @@ public slots:
     void search();
     void info();
     void configure();
+    void timer();
 };
 
 #endif // BADGEWINDOW_H

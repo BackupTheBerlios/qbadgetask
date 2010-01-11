@@ -155,6 +155,7 @@ void DialogDay::save()
 void DialogDay::task()
 {
     DialogTask dialog;
+    QTime initialTime(0, 0, 0);
     taskModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
     taskModel->setTable("task");
     qDebug() << "Day" << day.toString("yyyy-MM-dd") << endl;
@@ -168,7 +169,7 @@ void DialogDay::task()
 
     taskModel->select();
     //QSqlRelationalTableModel todoModel;
-    dialog.openTask("Task", "Elapsed", taskModel, day, "task");
+    dialog.openTask("Task", "Elapsed", taskModel, day, "task", initialTime);
 }
 
 void DialogDay::todo()
@@ -177,6 +178,7 @@ void DialogDay::todo()
         save();
     }
     DialogTask dialog;
+    QTime initialTime(0, 0, 0);
     taskModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
     taskModel->setTable("todo");
     qDebug() << "Day" << day.toString("yyyy-MM-dd") << endl;
@@ -190,5 +192,5 @@ void DialogDay::todo()
 
     taskModel->select();
     //QSqlRelationalTableModel todoModel;
-    dialog.openTask("ToDo", "Expected", taskModel, day, "todo");
+    dialog.openTask("ToDo", "Expected", taskModel, day, "todo", initialTime);
 }

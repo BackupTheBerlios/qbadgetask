@@ -8,13 +8,15 @@
 #include <QMessageBox>
 #include "dialogconfigure.h"
 #include "dialogstatistics.h"
-
+#include "dialogtimer.h"
+#include "dialogtask.h"
 
 BadgeWindow::BadgeWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::BadgeWindow)
 {
     ui->setupUi(this);
     ui->menuBar->addAction(ui->actionSearch);
+    ui->menuBar->addAction(ui->actionTimer);
     ui->menuBar->addAction(ui->actionInfo);
     ui->menuBar->addAction(ui->actionConfigure);
 #ifndef Q_WS_HILDON
@@ -22,6 +24,7 @@ BadgeWindow::BadgeWindow(QWidget *parent)
 #endif
 
     connect(ui->actionSearch, SIGNAL(triggered()), this, SLOT(search()));
+    connect(ui->actionTimer, SIGNAL(triggered()), this, SLOT(timer()));
     connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->actionInfo, SIGNAL(triggered()), this, SLOT(info()));
     connect(ui->actionConfigure, SIGNAL(triggered()), this, SLOT(configure()));
@@ -126,10 +129,48 @@ void BadgeWindow::search()
 
 }
 
+void BadgeWindow::timer()
+{
+    DialogTimer dialogTimer;
+
+    bool saveRequest;
+    QString taskName;
+    QTime elapsedTime;
+
+    saveRequest = dialogTimer.getTaskInfo(taskName, elapsedTime);
+
+    if (saveRequest) {
+        DialogTask dialog;
+        QSqlRelationalTableModel *taskModel;
+
+        taskModel = new QSqlRelationalTableModel();
+
+        taskModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
+        taskModel->setTable("task");
+        qDebug() << "Day" << QDate::currentDate().toString("yyyy-MM-dd") << endl;
+        taskModel->setFilter("day='" + QDate::currentDate().toString("yyyy-MM-dd") + "'");
+        //taskModel.setEditStrategy(QSqlTableModel::OnFieldChange);
+        taskModel->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
+        taskModel->setHeaderData(1, Qt::Horizontal, QObject::tr("Date"));
+        taskModel->setHeaderData(2, Qt::Horizontal, QObject::tr("Elapsed"));
+        //taskModel->setHeaderData(3, Qt::Horizontal, QObject::tr("Attivita'"));
+        taskModel->setRelation(3, QSqlRelation("attivita", "id", "attivita"));
+
+        taskModel->select();
+
+        // TODO: if current date don't exist create it
+
+
+        dialog.openTask("Task", "Elapsed", taskModel, QDate::currentDate(), "task", elapsedTime, taskName);
+
+        delete taskModel;
+    }
+}
+
 void BadgeWindow::info()
 {
     QMessageBox::aboutQt(this);
-    QMessageBox::about(this, tr("Badge"), tr("(c) 2009 Nicola De Filippo - nicola@nicoladefilippo.it\n"
+    QMessageBox::about(this, tr("Badge"), tr("(c) 2009 - 2010 Nicola De Filippo - nicola@nicoladefilippo.it\n"
                          "This program is licensed to you under terms of the GNU General Public\n"
                         "License Version 2 as published by Free Software Foundation. This gives\n"
                         "you legal permission to copy, distribute and/or modify this software under\n"

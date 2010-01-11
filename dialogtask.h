@@ -15,7 +15,7 @@ class DialogTask : public QDialog {
 public:
     DialogTask(QWidget *parent = 0);
     ~DialogTask();
-    void openTask(QString title, QString labelTime, QSqlRelationalTableModel *model, QDate data, QString dbtable);
+    void openTask(QString title, QString labelTime, QSqlRelationalTableModel *model, QDate data, QString dbtable, QTime initialTime, QString name = "");
 
 protected:
     void changeEvent(QEvent *e);

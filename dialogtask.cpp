@@ -44,12 +44,12 @@ void DialogTask::insert()
     }
 
 
-    int idAttivita = findAttivitaId(ui->lineEdit->text());
+    int idAttivita = findAttivitaId(ui->lineEdit->text().toUpper());
 
 
 
     if (idAttivita > 0) {
-        QSqlRecord record = findAttivitaInDay(ui->lineEdit->text(), day);
+        QSqlRecord record = findAttivitaInDay(ui->lineEdit->text().toUpper(), day);
         QSqlTableModel m;
         int id;
         QSqlField f1("id", QVariant::Int);
@@ -191,10 +191,12 @@ void DialogTask::addNote(int id)
 }
 
 
-void DialogTask::openTask(QString title, QString labelTime, QSqlRelationalTableModel *modelTask, QDate daySelected, QString dbtable)
+void DialogTask::openTask(QString title, QString labelTime, QSqlRelationalTableModel *modelTask, QDate daySelected, QString dbtable, QTime initialTime, QString name)
 {
     this->setWindowTitle(title);
     ui->label->setText(labelTime);
+    ui->lineEdit->setText(name);
+    ui->timeEdit->setTime(initialTime);
     day = daySelected;
     model = modelTask;
     ui->tableView->setModel(model);
@@ -204,6 +206,9 @@ void DialogTask::openTask(QString title, QString labelTime, QSqlRelationalTableM
     table = dbtable;
     textNoteChanged = false;
     ui->pushButtonInsert->setEnabled(false);
+
+    if (name.size() > 0)
+        ui->pushButtonInsert->setEnabled(true);
 
     if (this->exec() == QDialog::Accepted) {
 

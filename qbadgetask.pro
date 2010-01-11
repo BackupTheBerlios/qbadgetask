@@ -13,7 +13,8 @@ SOURCES += main.cpp \
     dialogcalendar.cpp \
     dialogtask.cpp \
     dialogconfigure.cpp \
-    dialogstatistics.cpp
+    dialogstatistics.cpp \
+    dialogtimer.cpp
 HEADERS += badgewindow.h \
     badgedata.h \
     timetable.h \
@@ -23,11 +24,13 @@ HEADERS += badgewindow.h \
     dialogtask.h \
     dialogconfigure.h \
     connection.h \
-    dialogstatistics.h
+    dialogstatistics.h \
+    dialogtimer.h
 FORMS += badgewindow.ui \
     dialogday.ui \
     dialogsearch.ui \
     dialogcalendar.ui \
     dialogtask.ui \
     dialogconfigure.ui \
-    dialogstatistics.ui
+    dialogstatistics.ui \
+    dialogtimer.ui
