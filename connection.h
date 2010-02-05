@@ -23,8 +23,11 @@ static bool createConnection()
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
 
 
-
+#ifdef Q_WS_WIN
+    db.setDatabaseName(QDir::currentPath() + QDir::separator() + "badgetask");
+#else
     db.setDatabaseName(QDir::homePath() + QDir::separator() + "badgetask");
+#endif
 
 
     if (!db.open()) {
