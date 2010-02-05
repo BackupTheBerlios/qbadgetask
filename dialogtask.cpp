@@ -39,6 +39,11 @@ DialogTask::DialogTask(QWidget *parent) :
 
 void DialogTask::insert()
 {
+    BadgeData data;
+    QTime total;
+    QTime remain;
+
+
     if (ui->lineEdit->text().size() == 0) {
         QMessageBox::warning(this, "Insert", "Activity is empty");
         return;
@@ -134,6 +139,11 @@ void DialogTask::insert()
     }
     textNoteChanged = false;
     ui->pushButtonInsert->setEnabled(false);
+
+    data.dayRemain(day, total, remain);
+
+    ui->timeEditRemain->setTime(remain);
+
 }
 
 void DialogTask::addNote(int id)
@@ -204,6 +214,7 @@ void DialogTask::openTask(QString title, QString labelTime, QSqlRelationalTableM
     QTime total;
     QTime remain;
 
+    day = daySelected;
     this->setWindowTitle(title);
     ui->label->setText(labelTime);
     ui->lineEdit->setText(name);
