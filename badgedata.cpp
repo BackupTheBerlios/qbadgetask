@@ -265,7 +265,6 @@ void BadgeData::dayRemain(QDate day, QTime &total, QTime &remain)
 {
 
     QSqlQuery query;
-    QSqlQuery queryTask;
     QVariant vbegin(day);
 
 
@@ -293,9 +292,15 @@ void BadgeData::dayRemain(QDate day, QTime &total, QTime &remain)
     query.exec();
 
 
+
     while (query.next()) {
 
-        entrance = query.value(4).toTime();
+        entrance = query.value(1).toTime();
+        exit = query.value(2).toTime();
+        beginFirst  = query.value(3).toTime();
+        endFirst  = query.value(4).toTime();
+        beginSecond  = query.value(5).toTime();
+        endSecond  = query.value(6).toTime();
 
         if (exit > entrance) {
             dayHour += entrance.secsTo(exit);
@@ -314,6 +319,7 @@ void BadgeData::dayRemain(QDate day, QTime &total, QTime &remain)
 
     total.setHMS((int)(dayHour / 3600), (int) ((dayHour % 3600) / 60), 0);
 
+    query.clear();
     query.prepare("select *  from task where day = ?");
     query.addBindValue(vbegin);
     query.exec();
@@ -321,7 +327,7 @@ void BadgeData::dayRemain(QDate day, QTime &total, QTime &remain)
 
     while (query.next()) {
 
-        taskTime = query.value(1).toTime();
+        taskTime = query.value(3).toTime();
         taskSeconds += zeroTime.secsTo(taskTime);
 
     }
