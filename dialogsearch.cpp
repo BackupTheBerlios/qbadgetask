@@ -60,7 +60,7 @@ void DialogSearch::end()
     return QTime(0, 0, 0, 0);
 }*/
 
-bool DialogSearch::range(QDate &begin, QDate &end)
+bool DialogSearch::range(QDate &begin, QDate &end, QString &own)
 {
     QDate start;
 
@@ -79,6 +79,7 @@ bool DialogSearch::range(QDate &begin, QDate &end)
         ok = true;*/
         begin = ui->dateEditStart->date();
         end = ui->dateEditEnd->date();
+        own = ui->lineEditOwn->text();
         return true;
     }
     return false;

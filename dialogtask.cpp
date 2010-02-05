@@ -1,5 +1,6 @@
 #include "dialogtask.h"
 #include "ui_dialogtask.h"
+#include "badgedata.h"
 #include <QMessageBox>
 #include <QCompleter>
 
@@ -52,12 +53,14 @@ void DialogTask::insert()
         QSqlRecord record = findAttivitaInDay(ui->lineEdit->text().toUpper(), day);
         QSqlTableModel m;
         int id;
+        QSqlField f0("own", QVariant::String);
         QSqlField f1("id", QVariant::Int);
         QSqlField f2("day", QVariant::Date);
 
         QSqlField f4("how", QVariant::Int);
         QSqlField f3("time", QVariant::Time);
 
+        f0.setValue(QVariant(ui->lineEditOwn->text()));
         f3.setValue(QVariant(ui->timeEdit->time()));
         f4.setValue(QVariant(idAttivita));
         f2.setValue(QVariant(day));
@@ -66,6 +69,9 @@ void DialogTask::insert()
         m.setFilter("day='" + day.toString("yyyy-MM-dd") + "'");
         m.select();
 
+
+
+
         if (record.count() == 0) {
 
             id = this->nextId();
@@ -73,7 +79,7 @@ void DialogTask::insert()
 
             f1.setValue(QVariant(id));       
 
-
+            record.append(f0);
             record.append(f1);
             record.append(f2);
             record.append(f3);
@@ -91,11 +97,12 @@ void DialogTask::insert()
 
 
             QSqlRecord recordTask;
-            id = record.value(0).toInt();
+            id = record.value(1).toInt();
 
+            qDebug() << "ID " <<  id << endl;
 
             f1.setValue(QVariant(id));
-
+            recordTask.append(f0);
             recordTask.append(f1);
             recordTask.append(f2);
             recordTask.append(f3);
@@ -176,7 +183,7 @@ void DialogTask::addNote(int id)
             }
             else
                 qDebug() << "UPDATE KO " << endl;
-            modelNote.submit();
+            //modelNote.submit();
         }
 
 
@@ -193,6 +200,10 @@ void DialogTask::addNote(int id)
 
 void DialogTask::openTask(QString title, QString labelTime, QSqlRelationalTableModel *modelTask, QDate daySelected, QString dbtable, QTime initialTime, QString name)
 {
+    BadgeData data;
+    QTime total;
+    QTime remain;
+
     this->setWindowTitle(title);
     ui->label->setText(labelTime);
     ui->lineEdit->setText(name);
@@ -200,12 +211,17 @@ void DialogTask::openTask(QString title, QString labelTime, QSqlRelationalTableM
     day = daySelected;
     model = modelTask;
     ui->tableView->setModel(model);
-    ui->tableView->setColumnHidden(0, true);
+    ui->tableView->setColumnHidden(1, true);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
     ui->tableView->resizeColumnsToContents();
     table = dbtable;
     textNoteChanged = false;
     ui->pushButtonInsert->setEnabled(false);
+
+    data.dayRemain(daySelected, total, remain);
+    ui->timeEditTotal->setTime(total);
+    ui->timeEditRemain->setTime(remain);
+
 
     if (name.size() > 0)
         ui->pushButtonInsert->setEnabled(true);
@@ -236,7 +252,7 @@ int DialogTask::nextId()
 
 int DialogTask::findAttivitaId(const QString &attivita)
 {
-    QSqlTableModel *attivitaModel = model->relationModel(3);
+    QSqlTableModel *attivitaModel = model->relationModel(4);
     int row = 0;
 
     while (row < attivitaModel->rowCount()) {
@@ -258,10 +274,12 @@ QSqlRecord DialogTask::findNote(int id, QString tablenote, QDate day, int &row)
     m.select();
     row = 0;
 
+    qDebug() << "ID find" << id << endl;
+
     while (row < m.rowCount()) {
         record = m.record(row);
-        if (record.value("id") == id) {
-
+        if (record.value("taskid").toInt() == id) {
+            qDebug() << "TROVATO\n";
             return record;
         }
         row++;
@@ -295,7 +313,7 @@ QSqlRecord DialogTask::findAttivitaInDay(QString attivita, QDate day)
 
 int DialogTask::addNewAttivita(const QString &attivita)
 {
-    QSqlTableModel *attivitaModel = model->relationModel(3);
+    QSqlTableModel *attivitaModel = model->relationModel(4);
     QSqlRecord record;
 
     int id = generateAttivitaId();
@@ -353,6 +371,7 @@ void DialogTask::selectedRow(QModelIndex index)
         ui->textEdit->setText(recordNote.value("note").toString());
     }
     ui->lineEdit->setText(record.value("attivita").toString());
+    ui->lineEditOwn->setText(record.value("own").toString());
     ui->timeEdit->setTime(record.value("time").toTime());
     textNoteChanged = false;
 

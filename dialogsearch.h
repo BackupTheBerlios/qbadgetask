@@ -14,7 +14,7 @@ public:
     DialogSearch(QWidget *parent = 0);
     ~DialogSearch();
     //QTime totalHours(bool &ok);
-    bool range(QDate &begin, QDate &end);
+    bool range(QDate &begin, QDate &end, QString &own);
 protected:
     void changeEvent(QEvent *e);
 

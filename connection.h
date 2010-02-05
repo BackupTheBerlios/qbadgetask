@@ -42,9 +42,9 @@ static bool createConnection()
     query.exec("create table IF NOT EXISTS attivita (id int primary key, attivita varchar(30))");
     query.exec("create table IF NOT EXISTS days (daywork DATE primary key, enter DATETIME, exit DATETIME, beginfirst DATETIME, endfirst DATETIME,"
                 "beginsecond DATETIME, endsecond DATETIME)");
-    query.exec("create table IF NOT EXISTS todo (id int primary key, day DATE, time DATETIME, how int, FOREIGN KEY(how) REFERENCES attivita(id))");
+    query.exec("create table IF NOT EXISTS todo (own varchar(30), id int primary key, day DATE, time DATETIME, how int, FOREIGN KEY(how) REFERENCES attivita(id))");
     query.exec("create table IF NOT EXISTS todonote (id int primary key, note blob, todoid int, FOREIGN KEY(todoid) REFERENCES todo(id))");
-    query.exec("create table IF NOT EXISTS task (id int primary key, day DATE, time DATETIME, how int)");
+    query.exec("create table IF NOT EXISTS task (own varchar(30), id int primary key, day DATE, time DATETIME, how int)");
     query.exec("create table IF NOT EXISTS tasknote (id int primary key, note blob, taskid int, FOREIGN KEY(taskid) REFERENCES task(id))");
 
     return true;

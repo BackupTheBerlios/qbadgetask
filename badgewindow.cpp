@@ -90,9 +90,10 @@ void BadgeWindow::search()
     QDate begin;
     QDate end;
     bool ok;
+    QString own;
 
     //total = searchDialog.totalHours(ok);
-    if (searchDialog.range(begin, end)) {
+    if (searchDialog.range(begin, end, own)) {
 
         DialogStatistics statistics;
         int overTime;
@@ -100,14 +101,20 @@ void BadgeWindow::search()
         BadgeData data;
         QMap <QString, QTime> activities;
         QSqlQueryModel *model;
-
+        QString query;
         model = new QSqlQueryModel();
 
         ok = true;
         total = data.totalTime(begin, end, overTime, /*activities,*/ workingTime, days);
 
+        query = "select attivita.attivita, (sum((strftime('%H',time) * 3600) + (strftime('%M',time) * 60)) / 3600),   ((sum((strftime('%H',time) * 3600) + (strftime('%M',time) * 60)) % 3600) /60) from attivita join task on (attivita.id=task.how) where task.day >= '"+ begin.toString("yyyy-MM-dd") + "' AND task.day <= '" + end.toString("yyyy-MM-dd") + "'";
 
-        model->setQuery("select attivita.attivita, (sum((strftime('%H',time) * 3600) + (strftime('%M',time) * 60)) / 3600),   ((sum((strftime('%H',time) * 3600) + (strftime('%M',time) * 60)) % 3600) /60) from attivita join task on (attivita.id=task.how) where task.day >= '"+ begin.toString("yyyy-MM-dd") + "' AND task.day <= '" + end.toString("yyyy-MM-dd") + "' group by attivita.attivita");
+        if (own.size() > 0)
+             query += " AND task.own='" + own + "'";
+
+        query += " group by attivita.attivita";
+
+        model->setQuery(query);
         model->setHeaderData(0, Qt::Horizontal, tr("Task"));
         model->setHeaderData(1, Qt::Horizontal, tr("Hours"));
         model->setHeaderData(2, Qt::Horizontal, tr("Minutes"));

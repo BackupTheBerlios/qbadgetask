@@ -21,6 +21,12 @@ protected:
 
 private:
     Ui::DialogStatistics *ui;
+    QString _begin;
+    QString _end;
+
+public slots:
+    void details(QModelIndex);
+
 };
 
 #endif // DIALOGSTATISTICS_H

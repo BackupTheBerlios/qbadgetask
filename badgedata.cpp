@@ -260,3 +260,79 @@ int BadgeData::totalTime(QDate begin, QDate end, int &overTime /*, QMap<QString,
     return totalInSeconds;
 
 }
+
+void BadgeData::dayRemain(QDate day, QTime &total, QTime &remain)
+{
+
+    QSqlQuery query;
+    QSqlQuery queryTask;
+    QVariant vbegin(day);
+
+
+    // Working and pause Time
+
+    QTime entrance;
+    QTime exit;
+    QTime beginFirst;
+    QTime endFirst;
+    QTime beginSecond;
+    QTime endSecond;
+
+    QTime zeroTime;
+    QTime taskTime;
+
+    int dayHour = 0;
+    int taskSeconds = 0;
+    int remainSecs = 0;
+
+    zeroTime.setHMS(0, 0, 0);
+
+    query.prepare("select *  from days where daywork = ?");
+    query.addBindValue(vbegin);
+
+    query.exec();
+
+
+    while (query.next()) {
+
+        entrance = query.value(4).toTime();
+
+        if (exit > entrance) {
+            dayHour += entrance.secsTo(exit);
+            if (beginFirst != endFirst) {
+                dayHour -= beginFirst.secsTo(endFirst);
+            }
+
+            if (beginSecond != endSecond) {
+                dayHour -= beginSecond.secsTo(endSecond);
+            }
+
+
+
+        }
+    }
+
+    total.setHMS((int)(dayHour / 3600), (int) ((dayHour % 3600) / 60), 0);
+
+    query.prepare("select *  from task where day = ?");
+    query.addBindValue(vbegin);
+    query.exec();
+
+
+    while (query.next()) {
+
+        taskTime = query.value(1).toTime();
+        taskSeconds += zeroTime.secsTo(taskTime);
+
+    }
+
+    remainSecs = dayHour - taskSeconds;
+
+    if (remainSecs > 0) {
+        remain.setHMS((int)(remainSecs / 3600), (int) ((remainSecs % 3600) / 60), 0);
+    }
+
+
+
+}
+
