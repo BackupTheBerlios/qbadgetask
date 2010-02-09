@@ -89,14 +89,12 @@ void DialogTask::insert()
             record.append(f2);
             record.append(f3);
             record.append(f4);
-            if (m.insertRecord(-1, record))
-                qDebug() << "INSERITO\n";
-            else
-                qDebug() << "Inserimento fallito\n";
+            m.insertRecord(-1, record);
+
             m.submitAll();
             model->select();
             currentRow = model->rowCount() - 1;
-            //ui->tableView->selectRow(m.rowCount() - 1);
+
         }
         else {
 
@@ -104,7 +102,7 @@ void DialogTask::insert()
             QSqlRecord recordTask;
             id = record.value(1).toInt();
 
-            qDebug() << "ID " <<  id << endl;
+
 
             f1.setValue(QVariant(id));
             recordTask.append(f0);
@@ -113,14 +111,10 @@ void DialogTask::insert()
             recordTask.append(f3);
             recordTask.append(f4);
 
-            qDebug() << "CURRENT " << currentRow << endl;
 
 
-            if (m.setRecord(currentRow , recordTask)) {
-                qDebug() << "UPDATE OK\n";
-            }
-            else
-                qDebug() << "UPDATE KO " << m.lastError() << endl;
+            m.setRecord(currentRow , recordTask);
+
             m.submit();
 
         }
@@ -144,6 +138,9 @@ void DialogTask::insert()
 
     ui->timeEditRemain->setTime(remain);
 
+    ui->pushButtonInsert->setEnabled(false);
+
+
 }
 
 void DialogTask::addNote(int id)
@@ -162,7 +159,7 @@ void DialogTask::addNote(int id)
         QSqlField f3((table+"id"), QVariant::Int);
 
 
-        record = findNote(id, (table + "note"), day, row);
+        record = findNote(id, (table), day, row);
 
 
         f2.setValue(QVariant(ui->textEdit->toPlainText()));
@@ -177,10 +174,8 @@ void DialogTask::addNote(int id)
             recordNote.append(f1);
             recordNote.append(f2);
             recordNote.append(f3);
-            if (modelNote.insertRecord(-1, recordNote))
-                qDebug() << "NOTE INSERITO\n";
-            else
-                qDebug() << "NOTE Inserimento fallito\n";
+            modelNote.insertRecord(-1, recordNote);
+
         }
         else {
             f1.setValue(QVariant(record.value(0).toInt()));
@@ -188,12 +183,9 @@ void DialogTask::addNote(int id)
             recordNote.append(f2);
             recordNote.append(f3);
             modelNote.select();
-            if (modelNote.setRecord(row , recordNote)) {
-                qDebug() << "UPDATE OK\n";
-            }
-            else
-                qDebug() << "UPDATE KO " << endl;
-            //modelNote.submit();
+            modelNote.setRecord(row , recordNote);
+
+            modelNote.submit();
         }
 
 
@@ -281,16 +273,16 @@ QSqlRecord DialogTask::findNote(int id, QString tablenote, QDate day, int &row)
 {
     QSqlRecord record;
     QSqlTableModel m;
-    m.setTable(tablenote);
+    m.setTable(table + "note");
     m.select();
     row = 0;
 
-    qDebug() << "ID find" << id << endl;
+
 
     while (row < m.rowCount()) {
         record = m.record(row);
-        if (record.value("taskid").toInt() == id) {
-            qDebug() << "TROVATO\n";
+        if (record.value(tablenote + "id").toInt() == id) {
+
             return record;
         }
         row++;
@@ -401,6 +393,16 @@ void DialogTask::activityChanged()
     ui->pushButtonInsert->setEnabled(true);
 }
 
+void DialogTask::newTask()
+{
+    QTime zeroTime;
+    zeroTime.setHMS(0, 0, 0);
+    ui->lineEdit->clear();
+    ui->lineEditOwn->clear();
+    ui->textEdit->clear();
+    ui->timeEdit->setTime(zeroTime);
+    ui->pushButtonInsert->setEnabled(true);
+}
 
 DialogTask::~DialogTask()
 {

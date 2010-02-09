@@ -158,14 +158,15 @@ void DialogDay::task()
     QTime initialTime(0, 0, 0);
     taskModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
     taskModel->setTable("task");
-    qDebug() << "Day" << day.toString("yyyy-MM-dd") << endl;
+
     taskModel->setFilter("day='" + day.toString("yyyy-MM-dd") + "'");
     //taskModel.setEditStrategy(QSqlTableModel::OnFieldChange);
-    taskModel->setHeaderData(0, Qt::Horizontal, QObject::tr("Own"));
+    taskModel->setHeaderData(0, Qt::Horizontal, QObject::tr("Project"));
      taskModel->setHeaderData(1, Qt::Horizontal, QObject::tr("ID"));
     taskModel->setHeaderData(2, Qt::Horizontal, QObject::tr("Date"));
     taskModel->setHeaderData(3, Qt::Horizontal, QObject::tr("Elapsed"));
     //taskModel->setHeaderData(3, Qt::Horizontal, QObject::tr("Attivita'"));
+    taskModel->setHeaderData(4, Qt::Horizontal, QObject::tr("Task"));
     taskModel->setRelation(4, QSqlRelation("attivita", "id", "attivita"));
 
     taskModel->select();
@@ -183,14 +184,16 @@ void DialogDay::todo()
     QTime initialTime(0, 0, 0);
     taskModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
     taskModel->setTable("todo");
-    qDebug() << "Day" << day.toString("yyyy-MM-dd") << endl;
+
     taskModel->setFilter("day='" + day.toString("yyyy-MM-dd") + "'");
     //taskModel.setEditStrategy(QSqlTableModel::OnFieldChange);
-    taskModel->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-    taskModel->setHeaderData(1, Qt::Horizontal, QObject::tr("Date"));
-    taskModel->setHeaderData(2, Qt::Horizontal, QObject::tr("Expected"));
+    taskModel->setHeaderData(0, Qt::Horizontal, QObject::tr("Project"));
+    taskModel->setHeaderData(1, Qt::Horizontal, QObject::tr("ID"));
+    taskModel->setHeaderData(2, Qt::Horizontal, QObject::tr("Date"));
+    taskModel->setHeaderData(3, Qt::Horizontal, QObject::tr("Expected"));
+    taskModel->setHeaderData(4, Qt::Horizontal, QObject::tr("Activity"));
     //taskModel->setHeaderData(3, Qt::Horizontal, QObject::tr("Attivita'"));
-    taskModel->setRelation(3, QSqlRelation("attivita", "id", "attivita"));
+    taskModel->setRelation(4, QSqlRelation("attivita", "id", "attivita"));
 
     taskModel->select();
     //QSqlRelationalTableModel todoModel;

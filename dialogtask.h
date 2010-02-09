@@ -40,6 +40,7 @@ public slots:
     void noteChanged();
     void timeChanged();
     void activityChanged();
+    void newTask();
 };
 
 #endif // DIALOGTASK_H
