@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>463</width>
-    <height>351</height>
+    <height>352</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,6 +45,9 @@
      </item>
      <item row="6" column="0" colspan="3">
       <widget class="QTableView" name="tableView">
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
        <property name="selectionBehavior">
         <enum>QAbstractItemView::SelectRows</enum>
        </property>

@@ -53,9 +53,9 @@ void DialogStatistics::details(QModelIndex index)
     model->setQuery("select task.own, task.day, task.time, tasknote.note from attivita join task on (attivita.id=task.how) "
                     "left join tasknote on (tasknote.taskid=task.id) where task.day >='" + _begin + "' AND task.day <= '" + _end + "' AND attivita='" + index.data().toString() + "'");
 
-    QSqlQuery q =  model->query();
-    qDebug() << q.lastQuery();
-    model->setHeaderData(0, Qt::Horizontal, tr("Own"));
+
+
+    model->setHeaderData(0, Qt::Horizontal, tr("Project"));
     model->setHeaderData(1, Qt::Horizontal, tr("Day"));
     model->setHeaderData(2, Qt::Horizontal, tr("Time"));
     model->setHeaderData(3, Qt::Horizontal, tr("Note"));
