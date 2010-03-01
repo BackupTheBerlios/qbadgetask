@@ -334,7 +334,7 @@ void BadgeData::dayRemain(QDate day, QTime &total, QTime &remain)
 
     remainSecs = dayHour - taskSeconds;
 
-    if (remainSecs > 0) {
+    if (remainSecs >= 0) {
         remain.setHMS((int)(remainSecs / 3600), (int) ((remainSecs % 3600) / 60), 0);
     }
 
