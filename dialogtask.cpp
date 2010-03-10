@@ -9,6 +9,10 @@ DialogTask::DialogTask(QWidget *parent) :
     ui(new Ui::DialogTask)
 {
     ui->setupUi(this);
+
+
+    /* Model usato esclusivamente per il completer */
+
     QSqlTableModel *model = new QSqlTableModel;
     QStringList listAttivita;
     QSqlRecord record;
@@ -302,7 +306,7 @@ QSqlRecord DialogTask::findAttivitaInDay(QString attivita, QDate day)
 
     while (row < model->rowCount()) {
         record = model->record(row);
-        if (record.value("attivita") == attivita) {
+        if (record.value("attivita") == attivita && record.value("own") == ui->lineEditOwn->text()) {
 
             return record;
         }
